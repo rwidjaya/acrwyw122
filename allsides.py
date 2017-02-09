@@ -70,13 +70,3 @@ if __name__ == "__main__":
     filename = "as.csv"
     go()
     print("\ncreated as.csv")
-
-
-"""
-<td class="views-field views-field-title source-title">
-<td class="views-field views-field-field-bias-image">
-<a href="/bias/right-center">
-<span class="agree">
-<span class="disagree">
-http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title=
-"""
