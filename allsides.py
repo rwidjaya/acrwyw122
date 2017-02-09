@@ -1,5 +1,11 @@
 import bs4
 import urllib3
+import csv
+import numpy as np
+import pandas as pd
+
+asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
+
 
 def get_soup(url):
     '''
@@ -11,6 +17,7 @@ def get_soup(url):
     html = pm.urlopen(url=url, method="GET").data
     return bs4.BeautifulSoup(html, "html5lib")
 
+
 def source_info(soup):
     odd = soup.find_all("tr", class_="odd")
     odd = [(o, o.find_next("div", class_="rate-details")) for o in odd]
@@ -21,7 +28,7 @@ def source_info(soup):
     tags[::2] = odd
     tags[1::2] = even
 
-    info = []
+    info = {}
 
     for t in tags:
         source = ""
@@ -36,9 +43,34 @@ def source_info(soup):
                 rating = a.find("img")
                 if rating:
                     bias = rating["alt"][6:]
-        info += [(source, bias, agree, disagree, agree/disagree)]
+        if source not in info:
+            info[source] = (bias, agree, disagree, agree/disagree)
 
     return info
+
+
+def go():
+    soup = get_soup(asurl)
+    info = source_info(soup)
+    labels = ["News Source", "Bias", "Agree", "Disagree", "Ratio"]
+    df = pd.DataFrame(info, index=labels[1:]).T
+    df.columns.name = "News Source"
+    print(df)
+
+    with open("as.csv", "w") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow(labels)
+        for key in sorted(info.keys()):
+            row = [key]
+            row += [val for val in info[key]]
+            writer.writerow(row)
+
+
+if __name__ == "__main__":
+    filename = "as.csv"
+    go()
+    print("\ncreated as.csv")
+
 
 """
 <td class="views-field views-field-title source-title">
