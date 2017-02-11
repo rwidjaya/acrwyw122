@@ -5,29 +5,20 @@ from nltk.corpus import brown
 import string
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-
 stemmer = nltk.stem.porter.PorterStemmer()
 nopunc = dict((ord(p), None) for p in string.punctuation)
 
-
 def stem_tokens(tokens):
-    st = [stemmer.stem(item) for item in tokens]
-    return st
-
+    return [stemmer.stem(item) for item in tokens]
 
 def clean(text):
-    cleaned = stem_tokens(nltk.word_tokenize(text.lower().translate(nopunc)))
-    return cleaned
+    return stem_tokens(nltk.word_tokenize(text.lower().translate(nopunc)))
 
-
-sw = brown.words(categories='news') \
-    + brown.words(categories='editorial') \
-    + brown.words(categories='reviews')
-vectorizer = TfidfVectorizer(tokenizer=clean, stop_words=sw)
-
+sw = brown.words(categories='news') + brown.words(categories='editorial') + brown.words(categories='reviews')
+v = TfidfVectorizer(tokenizer=clean, stop_words=sw)
 
 def cossim(article1, article2):
-    tfidf = vectorizer.fit_transform([article1, article2])
+    tfidf = v.fit_transform([article1, article2])
     return ((tfidf * tfidf.T).A)[0,1]
 
 
