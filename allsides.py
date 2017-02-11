@@ -3,19 +3,10 @@ import urllib3
 import csv
 import numpy as np
 import pandas as pd
+import certifi
+import util
 
 asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
-
-
-def get_soup(url):
-    '''
-    Generates a BeautifulSoup object given a URL.
-    Input: url (string)
-    Returns: BeautifulSoup object
-    '''
-    pm = urllib3.PoolManager()
-    html = pm.urlopen(url=url, method="GET").data
-    return bs4.BeautifulSoup(html, "html5lib")
 
 
 def source_info(soup):
@@ -50,7 +41,7 @@ def source_info(soup):
 
 
 def go():
-    soup = get_soup(asurl)
+    soup = util.get_soup(asurl)
     info = source_info(soup)
     labels = ["News Source", "Bias", "Agree", "Disagree", "Ratio"]
     df = pd.DataFrame(info, index=labels[1:]).T
