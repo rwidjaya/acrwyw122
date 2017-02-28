@@ -7,11 +7,10 @@ ranks = ["Left", "Lean Left", "Centre", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
 
 def get_mirrors(url):
+    #where url = the regex cleaned portion of the url
 
     if url in allsides.index:
         opprank = ranksrev[ranks.index(allsides.ix[url, "Bias"])]
-        print(opprank)
         murls = allsides["Bias"] == opprank
         mirrors = allsides[murls].index
-
         return list(mirrors)
