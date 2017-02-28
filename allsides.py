@@ -4,9 +4,18 @@ import csv
 import numpy as np
 import pandas as pd
 import certifi
+import re
 import util
 
 asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
+
+def get_source_url(url):
+    urlsoup = util.get_soup(url)
+    urltag = urlsoup.find("div", class_="source-image")
+    url = urltag.find("a")["href"].strip()
+    urlkey = re.search(r"(?<=://)(www[.])?(.+)([a-z/]*\.[a-z/]*)", url)
+    urlkey = urlkey.group(2).lower()
+    return urlkey
 
 def source_info(soup):
     odd = soup.find_all("tr", class_="odd")
@@ -21,6 +30,7 @@ def source_info(soup):
     info = {}
 
     for t in tags:
+        url = ""
         source = ""
         bias = ""
         agree = int(t[1].find("span", class_="agree").text)
@@ -28,20 +38,41 @@ def source_info(soup):
         alist = t[0].find_all("a", href=True)
         for a in alist:
             if "news-source" in a["href"]:
+                if "how-do-we-fix-it" in a["href"]:
+                    url = "howdowefixit"
+                elif "media-matters" in a["href"]:
+                    url = "mediamatters"
+                elif "media-research-center" in a["href"]:
+                    url = "mrc"
+                elif "newsweek" in a["href"]:
+                    url = "newsweek"
+                elif "slate" in a["href"]:
+                    url = "slate"
+                elif "hill" in a["href"]:
+                    url = "thehill"
+                elif "reason" in a["href"]:
+                    url = "reason"
+                elif "watchdogorg" in a["href"]:
+                    url = "watchdog"
+                elif "wall-street-journal" in a["href"]:
+                    url = "wsj"
+                else:
+                    url = get_source_url("www.allsides.com{}".format(a["href"]))
                 source = a.text
+
             elif "bias" in a["href"]:
                 rating = a.find("img")
                 if rating:
                     bias = rating["alt"][6:]
-        if source not in info:
-            info[source] = (bias, agree, disagree, agree/disagree)
+        if url not in info:
+            info[url] = (source, bias, agree, disagree, agree/disagree)
 
     return info
 
 def go():
     soup = util.get_soup(asurl)
     info = source_info(soup)
-    labels = ["News Source", "Bias", "Agree", "Disagree", "Ratio"]
+    labels = ["News Source URL", "Source Name", "Bias", "Agree", "Disagree", "Ratio"]
     df = pd.DataFrame(info, index=labels[1:]).T
     df.columns.name = "News Source"
     print(df)
@@ -54,7 +85,7 @@ def go():
             row += [val for val in info[key]]
             writer.writerow(row)
 
+
 if __name__ == "__main__":
-    filename = "as.csv"
     go()
     print("\ncreated as.csv")
