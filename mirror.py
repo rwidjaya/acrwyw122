@@ -3,7 +3,7 @@ import numpy as np
 
 allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL")
-ranks = ["Left", "Lean Left", "Centre", "Lean Right", "Right"]
+ranks = ["Left", "Lean Left", "Center", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
 
 def get_mirrors(url):
