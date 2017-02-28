@@ -1,0 +1,59 @@
+News Source URL,Source Name,Bias,Agree,Disagree,Ratio
+abcnews.go,ABC News,Lean Left,2270,2280,0.9956140350877193
+ap,Associated Press,Center,1514,702,2.156695156695157
+bbc,BBC News,Center,2193,1509,1.4532803180914513
+bloomberg,Bloomberg,Center,1254,1246,1.0064205457463884
+breitbart,Breitbart,Right,4625,2347,1.9706007669365146
+buzzfeed,Buzzfeed,Lean Left,962,909,1.0583058305830584
+cbn,CBN,Right,1343,766,1.7532637075718016
+cbs,CBS ,Lean Left,1110,1165,0.9527896995708155
+chicagotribune,Chicago Tribune,Center,440,577,0.7625649913344887
+cookpolitical,Cook Report,Center,202,94,2.148936170212766
+csmonitor,Christian Science Monitor,Center,2985,3578,0.8342649524874232
+democracynow,Democracy Now,Left,943,396,2.3813131313131315
+factcheck,FactCheck.org,Center,1621,1027,1.578383641674781
+fivethirtyeight,FiveThirtyEight,Center,937,433,2.163972286374134
+foxnews,Fox News,Right,7398,10486,0.7055121113866107
+howdowefixit,How Do We Fix It?,Center,121,97,1.2474226804123711
+huffingtonpost,Huffington Post,Left,6712,8295,0.8091621458710067
+ijreview,Independent Journal Review,Lean Right,381,265,1.4377358490566037
+judicialwatch,Judicial Watch,Lean Right,234,244,0.9590163934426229
+latimes,Los Angeles Times,Lean Left,969,879,1.1023890784982935
+mediaite,Mediaite,Lean Left,186,159,1.169811320754717
+mediamatters,Media Matters,Left,753,545,1.381651376146789
+motherjones,Mother Jones,Left,1078,231,4.666666666666667
+mrc,Media Research Center,Right,470,513,0.9161793372319688
+nationaljournal,National Journal,Center,384,281,1.3665480427046264
+nationalreview,National Review,Right,1322,633,2.088467614533965
+nbcnews,NBC News,Lean Left,955,1174,0.813458262350937
+newrepublic,New Republic,Left,361,235,1.5361702127659576
+newsmax,Newsmax,Right,2433,3329,0.7308501051366777
+newsweek,Newsweek,Lean Left,393,448,0.8772321428571429
+npr,NPR,Center,6857,4663,1.4705125455715204
+nypost,New York Post,Right,644,419,1.5369928400954653
+nytimes,New York Times,Lean Left,5303,8915,0.5948401570386989
+politico,Politico,Center,5154,8278,0.622614158009181
+realclearpolitics,Real Clear Politics,Center,717,620,1.1564516129032258
+reason,Reason,Lean Right,841,724,1.1616022099447514
+reuters,Reuters,Center,1143,516,2.2151162790697674
+salon,Salon,Left,4116,2108,1.952561669829222
+slate,Slate,Lean Left,626,533,1.174484052532833
+spectator,American Spectator,Right,1051,372,2.825268817204301
+theblaze,TheBlaze,Right,4692,2508,1.8708133971291867
+thedailybeast,Daily Beast,Center,1381,1584,0.8718434343434344
+thefederalist,The Federalist,Lean Right,353,252,1.4007936507936507
+thefiscaltimes,Fiscal Times,Lean Right,208,92,2.260869565217391
+thehill,The Hill,Center,1192,979,1.2175689479060265
+thelibertarianrepublic,The Libertarian Republic,Lean Right,170,168,1.0119047619047619
+thinkprogress,ThinkProgress,Left,644,247,2.6072874493927127
+time,Time Magazine,Left,755,933,0.8092175777063236
+townhall,Townhall,Right,3554,5797,0.6130757288252544
+usatoday,USA Today,Center,4069,2847,1.4292237442922375
+vox,Vox.com,Lean Left,2505,3936,0.6364329268292683
+washingtonexaminer,Washington Examiner,Right,428,238,1.7983193277310925
+washingtonpost,Washington Post,Lean Left,9008,5588,1.6120257695060844
+washingtontimes,Washington Times,Lean Right,8344,4497,1.8554591950189014
+watchdog,Watchdog.org,Lean Right,169,161,1.049689440993789
+weeklystandard,Weekly Standard,Right,376,189,1.9894179894179893
+westernjournalism,Western Journalism,Right,271,68,3.985294117647059
+wsj,Wall Street Journal- News,Center,4323,6899,0.626612552543847
