@@ -65,6 +65,7 @@ def pop_bias(link):
 		news_name, news_bias, agree, disagree, ratio = info[n]
 
 		sim_score = 0
+		sim_article = ""
 		
 		for n in news_links:
 			story = Article(n, keep_html_format = True)
@@ -79,6 +80,8 @@ def pop_bias(link):
 
 			#consider: using article keyword for preilminary sorting?
 			#??? WHAT IS THE SCORING MECHANISM???
+
+		#update dictionary with name, bias, & comparable url
 
 	return {}
 
