@@ -1,8 +1,7 @@
 import bs4
-import newspaper
-import bs4
 import re
 import json
+from newspaper import Article
 from news_crawl import *
 from allsides import *
 from util import *
@@ -30,50 +29,52 @@ def pop_bias(link):
 	news_list = get_mirror(is_featured)
 	rv = {}
 
+	story_input = Article(link, keep_html_format = True)
+	story_input.download()
+	story_input.parse()
+	story_input_text = story_input.text
+
 	for n in news_list:
 		if n == 'npr':
 			news_links = extract_npr()
-			news_name, news_bias, agree, disagree, ratio = info[n]
-
-			nltk_score = 0
-			#loop through each url in news_links
-				#use newspaper to extract article text (bc NYT cannot be extracted using get_text)/modify get_text --> roadblock atm
-				#run it through compare.py, store result
-				#consider using article keyword for preilminary sorting?
-				#??? WHAT IS THE CHOICE MECHANISM???
-
-			#update dict with name, bias, and comparable url 
-
-
-
+		
 		elif n == "wsj":
 			news_links = extract_wsj()
-			news_name, news_bias, agree, disagree, ratio = info[n]
-
 
 		elif n == "thefiscaltimes":
 			news_links = extract_fnt()
-			news_name, news_bias, agree, disagree, ratio = info[n]
 
 		elif n == "foxnews":
 			news_links = extract_fox()
-			news_name, news_bias, agree, disagree, ratio = info[n]
 
 		elif n == "breitbart":
 			news_links = extract_brt()
-			news_name, news_bias, agree, disagree, ratio = info[n]
 
 		elif n == "nytimes":
 			news_links = extract_nyt()
-			news_name, news_bias, agree, disagree, ratio = info[n]
 
 		elif n == "motherjones":
 			news_links = extract_mjs()
-			news_name, news_bias, agree, disagree, ratio = info[n]
 
 		elif n == "huffingtonpost":
 			news_links = extract_huf()
-			news_name, news_bias, agree, disagree, ratio = info[n]
+
+		news_name, news_bias, agree, disagree, ratio = info[n]
+
+		sim_score = 0
+		
+		for n in news_links:
+			story = Article(n, keep_html_format = True)
+			story.download()
+			story.parse()
+			story_text = story.text
+
+			sim_score = cossim(story_input_text, story_text)
+
+			#consider using article keyword for preilminary sorting?
+			#??? WHAT IS THE  MECHANISM???
+
+			#update dict with name, bias, and comparable url 
 
 
 
