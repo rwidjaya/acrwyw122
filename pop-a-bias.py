@@ -32,6 +32,9 @@ def pop_bias(link):
 	story_input = Article(link, keep_html_format = True)
 	story_input.download()
 	story_input.parse()
+	story_input.nlp()
+
+	story_input_keywords = story_input.keywords
 	story_input_text = story_input.text
 
 	for n in news_list:
@@ -67,14 +70,17 @@ def pop_bias(link):
 			story = Article(n, keep_html_format = True)
 			story.download()
 			story.parse()
+			story.nlp()
+
+			story_keywords = story.keywords
 			story_text = story.text
 
 			sim_score = cossim(story_input_text, story_text)
 
-			#consider using article keyword for preilminary sorting?
-			#??? WHAT IS THE  MECHANISM???
+			#consider: using article keyword for preilminary sorting?
+			#??? WHAT IS THE SCORING MECHANISM???
 
-			#update dict with name, bias, and comparable url 
+	return {}
 
 
 
