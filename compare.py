@@ -14,7 +14,7 @@ def stem_tokens(tokens):
 def clean(text):
     return stem_tokens(nltk.word_tokenize(text.lower().translate(nopunc)))
 
-sw = brown.words(categories='news') + brown.words(categories='editorial') + brown.words(categories='reviews')
+sw = brown.words(categories='news') #+ brown.words(categories='editorial') + brown.words(categories='reviews')
 v = TfidfVectorizer(tokenizer=clean, stop_words=sw)
 
 def cossim(article1, article2):
