@@ -68,7 +68,6 @@ def pop_bias(link):
 		agree = info["Agree"]
 		disagree = info["Disagree"]
 		ratio = info["Ratio"]
-		#news_name, news_bias, agree, disagree, ratio = allsides[nsource]
 
 		sim_score = 0
 		sim_article = ""
