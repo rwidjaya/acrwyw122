@@ -1,7 +1,7 @@
 import bs4
 import re
 import json
-#from newspaper import Article
+from newspaper import Article
 from news_crawl import *
 from allsides import *
 from util import *
@@ -29,15 +29,15 @@ def pop_bias(link):
 	news_list = get_mirror(is_featured)
 	rv = {}
 
-	'''story_input = Article(link, keep_html_format = True)
+	story_input = Article(link, keep_html_format = True)
 	story_input.download()
 	story_input.parse()
 	story_input.nlp()
 
 	story_input_keywords = story_input.keywords
-	story_input_text = story_input.text'''
+	story_input_text = story_input.text
 
-	story_input_text = get_text(link)
+	#story_input_text = get_text(link)
 
 	for nsource in news_list:
 		if nsource == 'npr':
@@ -70,14 +70,15 @@ def pop_bias(link):
 		sim_article = ""
 
 		for narticle in news_links:
-			'''story = Article(n, keep_html_format = True)
+			story = Article(n, keep_html_format = True)
 			story.download()
 			story.parse()
 			story.nlp()
 
 			story_keywords = story.keywords
-			story_text = story.textst'''
-			story_text = get_text(narticle)
+			story_text = story.textst
+
+			#story_text = get_text(narticle)
 
 			sim_score = cossim(story_input_text, story_text)
 
