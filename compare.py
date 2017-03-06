@@ -21,10 +21,12 @@ def cossim(article1, article2):
     tfidf = v.fit_transform([article1, article2])
     return ((tfidf * tfidf.T).A)[0,1]
 
-
+'''
+Sample Usage:
 g = "https://www.theguardian.com/us-news/2017/feb/09/judges-deny-trump-travel-ban-enforcement-uphold-order"
 b = "http://www.breitbart.com/big-government/2017/02/10/nuclear-option-trump-exec-order-sets-showdown-executive-judicial-branches/"
 guardian = util.get_text(g)
 breitbart = util.get_text(b)
 
-print("cosine similarity: {}".format(cossim(guardian, breitbart)))#
+print("cosine similarity: {}".format(cossim(guardian, breitbart)))
+'''
