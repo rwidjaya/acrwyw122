@@ -13,7 +13,7 @@ allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def in_allsides(link):
-	urlrgx = re.compile('(https?:\/\/)?(www)\.([\da-z\.-]+)\.(com|net|org|com)')
+	urlrgx = re.compile('(https?:\/\/)?(www)\.([\da-z\.-]+)\.(com|net|org)')
 	urlstr = urlrgx.search(link).group(3)
 
 	if urlstr in allsides.keys():
@@ -30,10 +30,15 @@ def pop_bias(link):
 	news_list = mirror.get_mirrors(is_featured)
 	rv = {}
 
+	print(news_list)
+
 	story_input = Article(link, keep_html_format = True)
 	story_input.download()
-	story_input.parse()
-	story_input_text = story_input.text
+	if story_input.is_downloaded:
+		story_input.parse()
+		story_input_text = story_input.text
+	else:
+		story_text = util.get_text(link)
 
 	for nsource in news_list:
 		if nsource == 'npr':
@@ -71,13 +76,18 @@ def pop_bias(link):
 		sim_article = ""
 
 		for narticle in news_links:
+			print(narticle)
 			story = Article(narticle, keep_html_format = True)
 			story.download()
-			story.parse()
-			story_text = story.text
+			print(story.is_downloaded)
+			if story.is_downloaded:
+				story.parse()
+				story_text = story.text
+			else:
+				story_text = util.get_text(narticle)
 
 			sim_score = compare.cossim(story_input_text, story_text)
-
+			print(sim_score)
 			if sim_score > 0.3:
 				if narticle not in rv:
 					rv[news_name] = [news_bias, narticle, sim_score]
