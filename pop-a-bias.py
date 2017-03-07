@@ -76,10 +76,8 @@ def pop_bias(link):
 		sim_article = ""
 
 		for narticle in news_links:
-			#print(narticle)
 			story = Article(narticle, keep_html_format = True)
 			story.download()
-			#print(story.is_downloaded)
 			if story.is_downloaded:
 				story.parse()
 				story_text = story.text
@@ -87,7 +85,6 @@ def pop_bias(link):
 				story_text = util.get_text(narticle)
 
 			sim_score = compare.cossim(story_input_text, story_text)
-			#print(sim_score)
 			if sim_score > 0.3:
 				if narticle not in rv:
 					rv[news_name] = [news_bias, narticle, sim_score]
@@ -97,5 +94,10 @@ def pop_bias(link):
 						#we want the article with highest sim score
 
 	final_answer = {key: val[:2] for key, val in rv.items()}
+	if len(final_answer) == 0:
+		final_answer["none"] = ["Unfortunately, there were no comparable articles on sites with different biases.", ""]
+	elif len(final_answer) < 3:
+		num_articles = len(final_answer)
+		final_answer["missing"] = ["We couldn't get three other stories on the same topic for you.  But here's {} articles!".format(num_articles),""]
 
 	return final_answer
