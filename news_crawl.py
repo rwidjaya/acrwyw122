@@ -1,8 +1,8 @@
-import newspaper
 import bs4
 import re
 import json
 from util import get_soup, get_text
+
 
 '''
 NPR
@@ -19,7 +19,6 @@ def extract_npr():
 		if a:
 			link = a['href']
 			if link not in npr_links:
-			# if (artrgx.search(link)) and (not oprgx.search(link)) and (link not in npr_links):
 				npr_links += [link]
 	return npr_links
 
@@ -37,6 +36,7 @@ def extract_wsj():
 	for a in wsj_story:
 		link = a['href']
 		artrgx = re.compile(r'www.wsj.com')
+
 		if (artrgx.search(link)) and (link not in wsj_links):
 			wsj_links += [link]
 
@@ -81,6 +81,7 @@ def extract_brt():
 		a = h2.find('a', href = True)
 		if a:
 			link = a['href']
+
 			if link not in brt_links:
 				brt_links += ['http://www.breitbart.com'+link]
 
@@ -99,35 +100,16 @@ def extract_fox():
 
 	for j in fox_json['itemListElement']:
 		for l in j['item']['itemListElement']:
-			furl = l['url']
+			link = l['url']
 			foxrgx = re.compile(r'www.foxnews.com')
-			if (foxrgx.search(furl)) and (link not in fox_news):
-				fox_links += [furl]
+			
+			if (foxrgx.search(link)) and (link not in fox_news):
+				fox_links += [link]
 
 	return fox_links
 
 
-'''
-BSG
 
-def extract_bsg():
-	bsg_url = 'http://www.bostonglobe.com/'
-	bsg_soup = get_soup(bsg_url)
-	bsg_story = bsg_soup.findAll('div', attrs={'class':'story'})
-
-	bsg_links = []
-
-	for div in bsg_story:
-		a = div.find('a', href = True)
-		if a:
-			link = a['href']
-			artrgx = re.compile(r'http')
-			oprgx = re.compile(r'opinion')
-			if (not artrgx.search(link)) and (not oprgx.search(link)) and (link not in bsg_links):
-				bsg_links += ['https://www.bostonglobe.com'+link]
-
-	return bsg_links
-'''
 
 '''
 NYT
@@ -146,6 +128,7 @@ def extract_nyt():
 			link = a['href']
 			artrgx = re.compile(r'com'+'\/\d{4}\/\d{2}\/\\d{2}')
 			oprgx = re.compile(r'opinion')
+
 			if artrgx.search(link) and (not oprgx.search(link)) and (link not in nyt_links):
 				nyt_links += [link]
 
@@ -165,6 +148,7 @@ def extract_mjs():
 		a = h3.find('a', href = True)
 		if a:
 			link = a['href']
+
 			if link not in mjs_links:
 				mjs_links += ['http://www.motherjones.com'+link]
 
@@ -184,6 +168,7 @@ def extract_huf():
 	for a in huf_story:
 		link = a['href']
 		artrgx = re.compile(r'www.huffingtonpost.com')
+
 		if (artrgx.search(link)) and (link not in huf_links):
 			huf_links += [link]
 
