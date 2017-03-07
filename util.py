@@ -8,7 +8,7 @@ import certifi
 def get_soup(url):
     pm = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
     html = pm.urlopen(url=url, method="GET").data
-    soup = bs4.BeautifulSoup(html, "html5lib")
+    soup = bs4.BeautifulSoup(html, "lxml")
     return soup
 
 def get_text(url):

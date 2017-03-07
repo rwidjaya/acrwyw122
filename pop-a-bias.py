@@ -76,10 +76,10 @@ def pop_bias(link):
 		sim_article = ""
 
 		for narticle in news_links:
-			print(narticle)
+			#print(narticle)
 			story = Article(narticle, keep_html_format = True)
 			story.download()
-			print(story.is_downloaded)
+			#print(story.is_downloaded)
 			if story.is_downloaded:
 				story.parse()
 				story_text = story.text
@@ -87,7 +87,7 @@ def pop_bias(link):
 				story_text = util.get_text(narticle)
 
 			sim_score = compare.cossim(story_input_text, story_text)
-			print(sim_score)
+			#print(sim_score)
 			if sim_score > 0.3:
 				if narticle not in rv:
 					rv[news_name] = [news_bias, narticle, sim_score]
