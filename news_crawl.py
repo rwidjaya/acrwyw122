@@ -102,8 +102,8 @@ def extract_fox():
 		for l in j['item']['itemListElement']:
 			link = l['url']
 			foxrgx = re.compile(r'www.foxnews.com')
-			
-			if (foxrgx.search(link)) and (link not in fox_news):
+
+			if (foxrgx.search(link)) and (link not in fox_links):
 				fox_links += [link]
 
 	return fox_links
