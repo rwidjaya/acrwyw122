@@ -1,96 +1,62 @@
 import bs4
 import re
 import json
-from util import get_soup, get_text
+from util import get_strained_soup, get_soup
 
 
-'''
-NPR
-'''
+def extract(url, tag, attr):
+	soup = get_strained_soup(url,tag,attr)
+	if tag=='a':
+		stories = soup.findAll(href=True)
+	else:
+		stories = soup.findAll('a',href=True)
+	links = []
+	links = [a['href'] for a in stories if a['href'] not in links]
+	return links
+
+#NPR
 def extract_npr():
 	npr_url = 'http://www.npr.org/sections/news/'
-	npr_soup = get_soup(npr_url)
-	npr_story = npr_soup.findAll('h2', attrs={'class':'title'})
+	npr_tag = 'h2'
+	npr_attr = {'class':'title'}
+	return extract(npr_url,npr_tag,npr_attr)
 
-	npr_links = []
-
-	for h2 in npr_story:
-		a = h2.find('a', href = True)
-		if a:
-			link = a['href']
-			if link not in npr_links:
-				npr_links += [link]
-	return npr_links
-
-
-'''
-WSJ
-'''
+#WALL STREET JOURNAL
 def extract_wsj():
 	wsj_url = 'https://www.wsj.com/'
-	wsj_soup = get_soup(wsj_url)
-	wsj_story = wsj_soup.findAll('a', attrs={'class' : 'wsj-headline-link'})
+	wsj_tag = 'a'
+	wsj_attr = {'class':'wsj-headline-link'}
 
-	wsj_links = []
+	artrgx = re.compile(r'www.wsj.com')
+	wsj_links = extract(wsj_url,wsj_tag,wsj_attr)
+	wsj_links_clean = [a for a in wsj_links if artrgx.search(a)]
 
-	for a in wsj_story:
-		link = a['href']
-		artrgx = re.compile(r'www.wsj.com')
+	return wsj_links_clean
 
-		if (artrgx.search(link)) and (link not in wsj_links):
-			wsj_links += [link]
+#FISCAL TIMES
+def extract_tft():
+	tft_url = 'http://www.thefiscaltimes.com/'
+	tft_tag = 'div'
+	tft_attr = {'class':'view-content'}
+	tft_links = extract(tft_url,tft_tag,tft_attr)
 
-	return wsj_links
+	artrgx = re.compile('\/\d{4}\/\d{2}\/\\d{2}')
+	oprgx = re.compile('\/Columns\/|\/Media\/')
+	tft_links_clean = ['http://www.thefiscaltimes.com/'+a for a in tft_links if artrgx.search(a) if not oprgx.search(a)]
 
+	return tft_links_clean
 
-'''
-FNT
-'''
-def extract_fnt():
-	fnt_url = 'http://www.thefiscaltimes.com/'
-	fnt_soup = get_soup(fnt_url)
-	fnt_story = fnt_soup.findAll('div', attrs={'class':'view-content'})
-
-	fnt_links = []
-
-	for div in fnt_story:
-		a = div.findAll('a', href = True)
-
-		for href in a:
-			link = href['href']
-			artrgx = re.compile('\/\d{4}\/\d{2}\/\\d{2}')
-			oprgx = re.compile('\/Columns\/|\/Media\/')
-
-			if (artrgx.search(link)) and (not oprgx.search(link)) and (link not in fnt_links):
-				fnt_links += ['http://www.thefiscaltimes.com/'+link]
-
-	return fnt_links
-
-'''
-BRT
-'''
-
+#BREITBART
 def extract_brt():
 	brt_url = 'http://www.breitbart.com/'
-	brt_soup = get_soup(brt_url)
-	brt_story = brt_soup.findAll('h2', attrs={'class' : 'title'})
+	brt_tag = 'h2'
+	brt_attr = {'class' : 'title'}
+	brt_links = extract(brt_url,brt_tag,brt_attr)
+	brt_links_clean = ['http://www.breitbart.com'+a for a in brt_links]
 
-	brt_links = []
+	return brt_links_clean
 
-	for h2 in brt_story:
-		a = h2.find('a', href = True)
-		if a:
-			link = a['href']
-
-			if link not in brt_links:
-				brt_links += ['http://www.breitbart.com'+link]
-
-	return brt_links
-
-
-'''
-FOX
-'''
+#FOX NEWS
 def extract_fox():
 	fox_url = 'http://www.foxnews.com/'
 	fox_soup = get_soup(fox_url)
@@ -102,74 +68,42 @@ def extract_fox():
 		for l in j['item']['itemListElement']:
 			link = l['url']
 			foxrgx = re.compile(r'www.foxnews.com')
-
 			if (foxrgx.search(link)) and (link not in fox_links):
 				fox_links += [link]
 
 	return fox_links
 
-
-
-
-'''
-NYT
-'''
-
+#NEW YORK TIMES
 def extract_nyt():
 	nyt_url = 'https://www.nytimes.com'
-	nyt_soup = get_soup(nyt_url)
-	nyt_story = nyt_soup.findAll('h2', attrs={'class' : 'story-heading'})
+	nyt_tag = 'h2'
+	nyt_attr = {'class' : 'story-heading'}
+	nyt_links = extract(nyt_url,nyt_tag,nyt_attr)
 
-	nyt_links = []
+	artrgx = re.compile(r'com'+'\/\d{4}\/\d{2}\/\\d{2}')
+	oprgx = re.compile(r'opinion')
+	nyt_links_clean = [a for a in nyt_links if artrgx.search(a) if not oprgx.search(a)]
 
-	for h2 in nyt_story:
-		a = h2.find('a', href = True)
-		if a:
-			link = a['href']
-			artrgx = re.compile(r'com'+'\/\d{4}\/\d{2}\/\\d{2}')
-			oprgx = re.compile(r'opinion')
+	return nyt_links_clean
 
-			if artrgx.search(link) and (not oprgx.search(link)) and (link not in nyt_links):
-				nyt_links += [link]
+#MOTHER JONES
+def extract_mojo():
+	mojo_url = 'http://www.motherjones.com/'
+	mojo_tag = 'h3'
+	mojo_attr = {'class':'title'}
+	mojo_links = extract(mojo_url,mojo_tag,mojo_attr)
+	mojo_links_clean = ['http://www.motherjones.com'+a for a in mojo_links]
 
-	return nyt_links
+	return mojo_links_clean
 
-'''
-MJS
-'''
-def extract_mjs():
-	mjs_url = 'http://www.motherjones.com/'
-	mjs_soup = get_soup(mjs_url)
-	mjs_story = mjs_soup.findAll('h3', attrs={'class':'title'})
+#HUFFINGTON POST
+def extract_huff():
+	huff_url = 'http://www.huffingtonpost.com/'
+	huff_tag = 'a'
+	huff_attr = {'class' : 'card__link'}
+	huff_links = extract(huff_url,huff_tag,huff_attr)
 
-	mjs_links = []
+	artrgx = re.compile(r'www.huffingtonpost.com')
+	huff_links_clean = [a for a in huff_links if artrgx.search(a)]
 
-	for h3 in mjs_story:
-		a = h3.find('a', href = True)
-		if a:
-			link = a['href']
-
-			if link not in mjs_links:
-				mjs_links += ['http://www.motherjones.com'+link]
-
-	return mjs_links
-
-
-'''
-HUF
-'''
-def extract_huf():
-	huf_url = 'http://www.huffingtonpost.com/'
-	huf_soup = get_soup(huf_url)
-	huf_story = huf_soup.findAll('a', attrs={'class' : 'card__link'})
-
-	huf_links = []
-
-	for a in huf_story:
-		link = a['href']
-		artrgx = re.compile(r'www.huffingtonpost.com')
-
-		if (artrgx.search(link)) and (link not in huf_links):
-			huf_links += [link]
-
-	return huf_links
+	return huff_links

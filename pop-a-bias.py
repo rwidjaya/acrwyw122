@@ -8,7 +8,6 @@ import compare
 import util
 import mirror
 
-
 allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
@@ -18,7 +17,6 @@ def in_allsides(link):
 
 	if urlstr in allsides.keys():
 		return urlstr
-
 	return False
 
 
@@ -30,10 +28,9 @@ def pop_bias(link):
 	news_list = mirror.get_mirrors(is_featured)
 	rv = {}
 
-	print(news_list)
-
 	story_input = Article(link, keep_html_format = True)
 	story_input.download()
+
 	if story_input.is_downloaded:
 		story_input.parse()
 		story_input_text = story_input.text
@@ -48,7 +45,7 @@ def pop_bias(link):
 			news_links = nc.extract_wsj()
 
 		elif nsource == "thefiscaltimes":
-			news_links = nc.extract_fnt()
+			news_links = nc.extract_tft()
 
 		elif nsource == "foxnews":
 			news_links = nc.extract_fox()
@@ -60,10 +57,10 @@ def pop_bias(link):
 			news_links = nc.extract_nyt()
 
 		elif nsource == "motherjones":
-			news_links = nc.extract_mjs()
+			news_links = nc.extract_mojo()
 
 		elif nsource == "huffingtonpost":
-			news_links = nc.extract_huf()
+			news_links = nc.extract_huff()
 
 		info = allsides[nsource]
 		news_name = info["Source Name"]
@@ -98,6 +95,6 @@ def pop_bias(link):
 		final_answer["none"] = ["Unfortunately, there were no comparable articles on sites with different biases.", ""]
 	elif len(final_answer) < 3:
 		num_articles = len(final_answer)
-		final_answer["missing"] = ["We couldn't get three other stories on the same topic for you.  But here's {} articles!".format(num_articles),""]
+		final_answer["missing"] = ["We couldn't get three stories on the same topic for you.  But here's {}!".format(num_articles),""]
 
 	return final_answer
