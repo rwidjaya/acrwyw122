@@ -16,22 +16,17 @@ def extract_npr():
 
 	for h2 in npr_story:
 		a = h2.find('a', href = True)
-		print(a)
-
 		if a:
 			link = a['href']
-
 			if link not in npr_links:
 			# if (artrgx.search(link)) and (not oprgx.search(link)) and (link not in npr_links):
 				npr_links += [link]
-
 	return npr_links
 
 
 '''
 WSJ
 '''
-
 def extract_wsj():
 	wsj_url = 'https://www.wsj.com/'
 	wsj_soup = get_soup(wsj_url)
@@ -64,7 +59,7 @@ def extract_fnt():
 		for href in a:
 			link = href['href']
 			artrgx = re.compile('\/\d{4}\/\d{2}\/\\d{2}')
-			oprgx = re.compile('\/Columns\/|\/Media\/') 
+			oprgx = re.compile('\/Columns\/|\/Media\/')
 
 			if (artrgx.search(link)) and (not oprgx.search(link)) and (link not in fnt_links):
 				fnt_links += ['http://www.thefiscaltimes.com/'+link]
@@ -127,7 +122,7 @@ def extract_bsg():
 		if a:
 			link = a['href']
 			artrgx = re.compile(r'http')
-			oprgx = re.compile(r'opinion') 
+			oprgx = re.compile(r'opinion')
 			if (not artrgx.search(link)) and (not oprgx.search(link)) and (link not in bsg_links):
 				bsg_links += ['https://www.bostonglobe.com'+link]
 
@@ -193,4 +188,3 @@ def extract_huf():
 			huf_links += [link]
 
 	return huf_links
-

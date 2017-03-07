@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import random
 
 allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL")
@@ -12,7 +13,6 @@ def get_mirrors(url):
 
     if url in allsides.index:
         opprank = ranksrev[ranks.index(allsides.ix[url, "Bias"])]
-        #print(opprank)
         murls = allsides.ix[sites]
         murls_rank = murls.Bias == opprank
 
@@ -20,8 +20,11 @@ def get_mirrors(url):
         mirrors = list(mirrors)
 
         #need to find better way to include the center leaning news
-        if opprank != "Center":
-        	mirrors += ["npr", "wsj"]
+        mirrors += ["npr", "wsj"]
+
+        if opprank == "Center":
+            mirrors += [random.choice["huffingtonpost","motherjones", "nytimes"]]
+            mirrors += [random.choice["foxnews","breitbart","thefiscaltimes"]]
 
         if url in mirrors:
         	mirrors.remove(url)

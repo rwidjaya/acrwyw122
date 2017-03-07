@@ -33,8 +33,6 @@ def pop_bias(link):
 	story_input = Article(link, keep_html_format = True)
 	story_input.download()
 	story_input.parse()
-
-	story_input_keywords = story_input.keywords
 	story_input_text = story_input.text
 
 	for nsource in news_list:
@@ -76,8 +74,6 @@ def pop_bias(link):
 			story = Article(narticle, keep_html_format = True)
 			story.download()
 			story.parse()
-
-			story_keywords = story.keywords
 			story_text = story.text
 
 			sim_score = compare.cossim(story_input_text, story_text)
