@@ -2,7 +2,7 @@ import newspaper
 import bs4
 import re
 import json
-from util import get_soup, get_text
+from .util import get_soup
 
 '''
 NPR

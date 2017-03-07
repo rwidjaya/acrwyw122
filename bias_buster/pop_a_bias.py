@@ -1,15 +1,11 @@
-import bs4
-import re
-import json
 import pandas as pd
 from newspaper import Article
-import news_crawl as nc
-import compare
-import util
-import mirror
+from .news_crawl import *
+from .compare import cossim
+from .mirror import get_mirrors
 
 
-allsides = pd.read_csv("as.csv")
+allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def in_allsides(link):
@@ -27,7 +23,7 @@ def pop_bias(link):
 
 	assert is_featured, "The news source is not in our database, please enter another article from different news source."
 
-	news_list = mirror.get_mirrors(is_featured)
+	news_list = get_mirrors(is_featured)
 	rv = {}
 
 	story_input = Article(link, keep_html_format = True)
@@ -37,28 +33,28 @@ def pop_bias(link):
 
 	for nsource in news_list:
 		if nsource == 'npr':
-			news_links = nc.extract_npr()
+			news_links = extract_npr()
 
 		elif nsource == "wsj":
-			news_links = nc.extract_wsj()
+			news_links = extract_wsj()
 
 		elif nsource == "thefiscaltimes":
-			news_links = nc.extract_fnt()
+			news_links = extract_fnt()
 
 		elif nsource == "foxnews":
-			news_links = nc.extract_fox()
+			news_links = extract_fox()
 
 		elif nsource == "breitbart":
-			news_links = nc.extract_brt()
+			news_links = extract_brt()
 
 		elif nsource == "nytimes":
-			news_links = nc.extract_nyt()
+			news_links = extract_nyt()
 
 		elif nsource == "motherjones":
-			news_links = nc.extract_mjs()
+			news_links = extract_mjs()
 
 		elif nsource == "huffingtonpost":
-			news_links = nc.extract_huf()
+			news_links = extract_huf()
 
 		info = allsides[nsource]
 		news_name = info["Source Name"]
@@ -76,7 +72,7 @@ def pop_bias(link):
 			story.parse()
 			story_text = story.text
 
-			sim_score = compare.cossim(story_input_text, story_text)
+			sim_score = cossim(story_input_text, story_text)
 
 			if sim_score > 0.3:
 				if narticle not in rv:
