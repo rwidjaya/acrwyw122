@@ -10,7 +10,7 @@ sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "nytimes", "mot
 
 def get_mirrors(url):
     #where url = the regex cleaned portion of the url
-
+    mirrors = []
     if url in allsides.index:
         opprank = ranksrev[ranks.index(allsides.ix[url, "Bias"])]
         murls = allsides.ix[sites]
@@ -20,13 +20,18 @@ def get_mirrors(url):
         mirrors = list(mirrors)
 
         #need to find better way to include the center leaning news
-        mirrors += ["npr", "wsj"]
+        if url == "wsj":
+            mirrors += ["npr"]
+        elif url == "npr":
+            mirrors += ["wsj"]
+        else:
+            mirrors += ["npr", "wsj"]
 
         if opprank == "Center":
-            mirrors += [random.choice["huffingtonpost","motherjones", "nytimes"]]
-            mirrors += [random.choice["foxnews","breitbart","thefiscaltimes"]]
+            mirrors += [random.choice(["huffingtonpost","motherjones", "nytimes"])]
+            mirrors += [random.choice(["foxnews","breitbart","thefiscaltimes"])]
 
-        if url in mirrors:
-        	mirrors.remove(url)
+    if url in mirrors:
+        mirrors.remove(url)
 
-        return mirrors
+    return list(set(mirrors))
