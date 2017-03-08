@@ -24,7 +24,7 @@ def get_strained_soup(url, tag, attr=None):
     return bs4.BeautifulSoup(html, "lxml", parse_only=strained)
 
 def get_text(url):
-    p_soup = get_soup(url)
-    text = p_soup.find_all("p")
+    p_soup = get_strained_soup(url,'p')
+    text = p_soup.find_all('p')
     txt = [t.text for t in text]
     return " ".join(txt)
