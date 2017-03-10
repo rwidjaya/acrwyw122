@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<link rel="stylesheet" type="text/css" href="../static/bias_buster_results.css">
+
+    <div id="header">
+		<p class="header">Bias Buster | <a class="header" href="/">Home</a></p>
+	</div>
+	<h1>We've busted your bias!</h1>
+    <h2>Looks like your original news site was ranked as "{{ data["ranking"] }}" by <a href="http://www.allsides.com/bias/bias-ratings">AllSides</a>. Here are some alternate news sites with centrist and opposing views that you might want to check out.</h2>
+    <ul>
+        <li><a href="{{ data['url_center'] }}"> "{{ data['title_center'] }}"</a> from {{ data["source_center"]}} </li>
+        <li><a href="{{ data['url_opp_one'] }}"> "{{ data['title_opp_one'] }}"</a> from {{ data["source_opp_one"]}}</li>
+        <li><a href="{{ data['url_opp_two'] }}"> "{{ data['title_opp_two'] }}"</a> from {{ data["source_opp_two"]}}</li>
+
+
+    </ul>
+
+
+{% endblock %}

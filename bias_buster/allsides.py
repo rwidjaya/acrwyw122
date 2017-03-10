@@ -5,12 +5,12 @@ import numpy as np
 import pandas as pd
 import certifi
 import re
-import util
+from .util import get_soup
 
 asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
 
 def get_source_url(url):
-    urlsoup = util.get_soup(url)
+    urlsoup = get_soup(url)
     urltag = urlsoup.find("div", class_="source-image")
     url = urltag.find("a")["href"].strip()
     urlkey = re.search(r"(?<=://)(www[.])?(.+)([a-z/]*\.[a-z/]*)", url)
@@ -70,7 +70,7 @@ def source_info(soup):
     return info
 
 def go():
-    soup = util.get_soup(asurl)
+    soup = get_soup(asurl)
     info = source_info(soup)
     labels = ["News Source URL", "Source Name", "Bias", "Agree", "Disagree", "Ratio"]
     df = pd.DataFrame(info, index=labels[1:]).T

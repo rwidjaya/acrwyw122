@@ -2,7 +2,8 @@ import pandas as pd
 import numpy as np
 import random
 
-allsides = pd.read_csv("as.csv")
+
+allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL")
 ranks = ["Left", "Lean Left", "Center", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
@@ -33,5 +34,6 @@ def get_mirrors(url):
 
     if url in mirrors:
         mirrors.remove(url)
+
 
     return list(set(mirrors))

@@ -1,4 +1,3 @@
-import util
 import nltk
 #nltk.download("punkt") download once if you haven't yet
 from nltk.corpus import brown
