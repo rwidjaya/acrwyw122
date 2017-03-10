@@ -32,8 +32,8 @@ def links_to_compare(url):
 			news_links += nc.extract_fox()
 		elif nsource == "breitbart":
 			news_links += nc.extract_brt()
-		elif nsource == "nytimes":
-			news_links += nc.extract_nyt()
+		#elif nsource == "nytimes":
+			#news_links += nc.extract_nyt()
 		elif nsource == "motherjones":
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
@@ -46,9 +46,8 @@ def art_compare(url_tup):
 	exists = get_regex_url(art_url)
 	if exists:
 		txt = get_story_or_title(art_url,story)
-		print("got txt")
+		print(art_url)
 		sim_score = compare.cossim(txt,inputstory)
-		print("got sim")
 		head = get_story_or_title(art_url,title)
 
 		return (head, exists, art_url, sim_score)
@@ -63,7 +62,7 @@ def pop_bias(url):
 	input_info = allsides[get_regex_url(url)]
 	input_source = input_info["Source Name"]
 	input_bias = input_info["Bias"]
-	rv = {input_head:(input_source, input_bias, url)}
+	rv = {input_source:(input_head, input_bias, url, 1)}
 
 	for article in compared:
 		if article:
@@ -72,19 +71,19 @@ def pop_bias(url):
 			source = info["Source Name"]
 			bias = info["Bias"]
 			if score > 0.3:
-				if headline not in rv:
-					rv[headline] = (source, bias, arturl, score)
+				if source not in rv:
+					rv[source] = (headline, bias, arturl, score)
 				else:
-					if rv[headline][3] < sim_score:
-						rv[headline] = (source, bias, arturl, score)
+					if rv[source][3] < score:
+						rv[source] = (headline, bias, arturl, score)
 					    #we want the article with highest sim score
 
-	final_answer = {key: val[:3] for key, val in rv.items()}
-	if len(final_answer) == 0:
+	final_answer = {val[0]: (key, val[1:3]) for key, val in rv.items()}
+	if len(final_answer) == 1:
 		final_answer["none"] = \
 		["Unfortunately, there were no comparable articles on sites with different biases.", ""]
 	elif len(final_answer) < 4:
-		num_articles = len(final_answer)
+		num_articles = len(final_answer) - 1
 		final_answer["missing"] = \
 		["We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),""]
 

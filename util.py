@@ -32,7 +32,7 @@ def get_regex_url(url):
             return urlstr
 
 def get_Article(url, storyortitle):
-    if ('nytimes' in url) or ('fiscaltimes'in url):
+    if ('nyt' in url) or ('fiscaltimes'in url):
         art = Article(url, keep_html_format = True)
         art.download()
         if art.is_downloaded:
@@ -42,11 +42,12 @@ def get_Article(url, storyortitle):
 
 def get_headline(url):
     h_soup = get_strained_soup(url, "title")
-    trgx = re.compile('(.*)(?=-)')
+    trgx =['(.*)(?=:)','(.*)(?=-)','(.*)(?=\|)','(.*)(?=/)']
     headline = h_soup.text
-
-    #headline = trgx.search(headline).group(0)
-    return headline.strip()
+    for r in trgx:
+        t = re.compile(r)
+        if t.search(headline):
+            return t.search(headline).group(1).strip()
 
 def get_story(url):
     p_soup = get_strained_soup(url,'p')
