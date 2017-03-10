@@ -51,7 +51,7 @@ def extract_tft():
 
 	artrgx = re.compile('\/\d{4}\/\d{2}\/\\d{2}')
 	oprgx = re.compile('\/Columns\/|\/Media\/')
-	tft_links_clean = ['http://www.thefiscaltimes.com/'+a for a in tft_links if artrgx.search(a) if not oprgx.search(a)]
+	tft_links_clean = ['http://www.thefiscaltimes.com'+a for a in tft_links if artrgx.search(a) if not oprgx.search(a)]
 
 	return tft_links_clean
 
@@ -73,14 +73,11 @@ def extract_fox():
 	fox_soup = get_soup(fox_hp)
 	fox_json = json.loads(fox_soup.find('script', type= 'application/ld+json').text)
 
-	fox_links = []
+	fox_links_clean = []
 
 	for j in fox_json['itemListElement']:
-		for l in j['item']['itemListElement']:
-			link = l['url']
-			foxrgx = re.compile(r'www.foxnews.com')
-			if (foxrgx.search(link)) and (link not in fox_links):
-				fox_links += link
+		foxrgx = re.compile(r'www.foxnews.com')
+		fox_links_clean += [l['url'] for l in j['item']['itemListElement'] if foxrgx.search(l['url'])]
 
 	fox_url = 'http://www.foxnews.com/world.html'
 	fox_tag = 'h2'
@@ -88,9 +85,9 @@ def extract_fox():
 	
 	oprgx = re.compile('\/opinion\/|sectionname')
 	fox_add_links_clean = ['http://www.foxnews.com'+a for a in fox_add_links if not oprgx.search(a)]
-	fox_links += fox_add_links_clean
+	fox_links_clean += [a for a in fox_add_links_clean if a not in fox_links_clean]
 
-	return fox_links
+	return fox_links_clean
 
 
 #NEW YORK TIMES

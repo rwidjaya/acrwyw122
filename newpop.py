@@ -38,27 +38,28 @@ def links_to_compare(url):
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
 			news_links += nc.extract_huff()
-	inputstory = get_story_or_title(url, story)
-	return [(inputstory, link2) for link2 in news_links]
+	inputitle, inputstory = get_story_or_title(url)
+	return [(inputitle, inputstory, link2) for link2 in news_links]
 
 def art_compare(url_tup):
-	inputstory, art_url = url_tup
+	inputitle, inputstory, art_url = url_tup
 	exists = get_regex_url(art_url)
 	if exists:
-		txt = get_story_or_title(art_url,story)
+		head, txt = get_story_or_title(art_url)
 		#print(art_url)
 		sim_score = compare.cossim(txt,inputstory)
-		head = get_story_or_title(art_url,title)
+		#head = get_story_or_title(art_url,title)
 
 		return (head, exists, art_url, sim_score)
 
 def pop_bias(url):
 	urls_to_crawl = links_to_compare(url)
+	#print(urls_to_crawl)
 	p = Pool(processes=25)
 	compared = p.map_async(art_compare, urls_to_crawl).get()
 	p.close()
 
-	input_head = get_story_or_title(url, title)
+	input_head, input_text = get_story_or_title(url)
 	input_info = allsides[get_regex_url(url)]
 	input_source = input_info["Source Name"]
 	input_bias = input_info["Bias"]
