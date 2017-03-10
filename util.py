@@ -37,3 +37,12 @@ def get_regex_url(url):
         if urlstr in allsides.keys():
             return urlstr
     return False
+
+def get_headline(url):
+    h_soup = get_strained_soup(url, "title")
+    tsep = "\||\:|\-"
+    trgx = re.compile('(.*)\s'+tsep+'.*')
+    headline = h_soup.text
+
+    headline = trgx.search(headline).group(1)
+    return headline
