@@ -10,7 +10,10 @@ allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def in_allsides(link):
 	urlrgx = re.compile('(https?:\/\/)?(www)\.([\da-z\.-]+)\.(com|net|org)')
-	urlstr = urlrgx.search(link).group(3)
+	if urlrgx.search(link):
+		urlstr = urlrgx.search(link).group(3)
+	else:
+		return False
 
 	if urlstr in allsides.keys():
 		return urlstr
