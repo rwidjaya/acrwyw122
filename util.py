@@ -25,9 +25,10 @@ def get_strained_soup(url, tag, attr=None):
     return BeautifulSoup(html, "lxml", parse_only=strained)
 
 def get_regex_url(url):
-    urlrgx = re.compile('(https?:\/\/)?(www)\.([\da-z\.-]+)\.(com|net|org)')
+    urlrgx = re.compile(r"(?<=://)(www[.])?(.+)([a-z/]*\.[a-z/]*)")
     if urlrgx.search(url):
-        urlstr = urlrgx.search(url).group(3)
+        urlstr = urlrgx.search(url).group(2)
+        print(urlstr)
         if urlstr in allsides.keys():
             return urlstr
 
@@ -42,12 +43,12 @@ def get_Article(url, storyortitle):
 
 def get_headline(url):
     h_soup = get_strained_soup(url, "title")
-    trgx =['(.*)(?=:)','(.*)(?=-)','(.*)(?=\|)','(.*)(?=/)']
+    trgx ='(.*)\s(?=\:|\-|\|)'
     headline = h_soup.text
-    for r in trgx:
-        t = re.compile(r)
-        if t.search(headline):
-            return t.search(headline).group(1).strip()
+    t = re.compile(trgx)
+    if urlrgx.search(url):
+        return t.search(headline).group(1).strip()
+
 
 def get_story(url):
     p_soup = get_strained_soup(url,'p')

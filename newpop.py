@@ -32,8 +32,8 @@ def links_to_compare(url):
 			news_links += nc.extract_fox()
 		elif nsource == "breitbart":
 			news_links += nc.extract_brt()
-		#elif nsource == "nytimes":
-			#news_links += nc.extract_nyt()
+		elif nsource == "nytimes":
+			news_links += nc.extract_nyt()
 		elif nsource == "motherjones":
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
@@ -46,7 +46,7 @@ def art_compare(url_tup):
 	exists = get_regex_url(art_url)
 	if exists:
 		txt = get_story_or_title(art_url,story)
-		print(art_url)
+		#print(art_url)
 		sim_score = compare.cossim(txt,inputstory)
 		head = get_story_or_title(art_url,title)
 
