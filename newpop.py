@@ -2,18 +2,19 @@ import bs4
 import re
 import json
 import pandas as pd
-from newspaper import Article
 import news_crawl as nc
 import compare
-import util
+from util import get_regex_url, get_story_or_title
 import mirror
 from multiprocessing import Pool
 
 allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
+story = 0
+title = 1
 
 def links_to_compare(url):
-	is_featured = util.get_regex_url(url)
+	is_featured = get_regex_url(url)
 
 	assert is_featured, "The news source is not in our database; please enter another article from different news source."
 
@@ -37,56 +38,54 @@ def links_to_compare(url):
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
 			news_links += nc.extract_huff()
-	inputstory = get_story(url)
+	inputstory = get_story_or_title(url, story)
 	return [(inputstory, link2) for link2 in news_links]
-
-def get_story(url):
-	if ('nytimes' in url) or ('fiscaltimes'in url):
-		story_input = Article(url, keep_html_format = True)
-		story_input.download()
-		if story_input.is_downloaded:
-			story_input.parse()
-			story_text = story_input.text
-	else:
-		story_text = util.get_text(url)
-	return story_text
 
 def art_compare(url_tup):
 	inputstory, art_url = url_tup
-	print(art_url)
-	if util.get_regex_url(art_url):
-		sim_score = compare.cossim(get_story(art_url), inputstory)
-		return (util.get_regex_url(art_url), art_url, sim_score)
-	else:
-		return None
+	exists = get_regex_url(art_url)
+	if exists:
+		txt = get_story_or_title(art_url,story)
+		print("got txt")
+		sim_score = compare.cossim(txt,inputstory)
+		print("got sim")
+		head = get_story_or_title(art_url,title)
+
+		return (head, exists, art_url, sim_score)
 
 def pop_bias(url):
 	urls_to_crawl = links_to_compare(url)
-	p = Pool(processes=30)
+	p = Pool(processes=25)
 	compared = p.map_async(art_compare, urls_to_crawl).get()
 	p.close()
-	rv = {}
+
+	input_head = get_story_or_title(url, title)
+	input_info = allsides[get_regex_url(url)]
+	input_source = input_info["Source Name"]
+	input_bias = input_info["Bias"]
+	rv = {input_head:(input_source, input_bias, url)}
 
 	for article in compared:
 		if article:
-			source, arturl, score = article
-			info = allsides[source]
-			news_name = info["Source Name"]
-			news_bias = info["Bias"]
-			print(score)
+			headline, sourcergx, arturl, score = article
+			info = allsides[sourcergx]
+			source = info["Source Name"]
+			bias = info["Bias"]
 			if score > 0.3:
-				if arturl not in rv:
-					rv[news_name] = [news_bias, arturl, score]
+				if headline not in rv:
+					rv[headline] = (source, bias, arturl, score)
 				else:
-					if rv[news_name][2] < sim_score:
-						rv[news_name] = [news_bias, arturl, score]
+					if rv[headline][3] < sim_score:
+						rv[headline] = (source, bias, arturl, score)
 					    #we want the article with highest sim score
 
-	final_answer = {key: val[:2] for key, val in rv.items()}
+	final_answer = {key: val[:3] for key, val in rv.items()}
 	if len(final_answer) == 0:
-		final_answer["none"] = ["Unfortunately, there were no comparable articles on sites with different biases.", ""]
-	elif len(final_answer) < 3:
+		final_answer["none"] = \
+		["Unfortunately, there were no comparable articles on sites with different biases.", ""]
+	elif len(final_answer) < 4:
 		num_articles = len(final_answer)
-		final_answer["missing"] = ["We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),""]
+		final_answer["missing"] = \
+		["We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),""]
 
 	return final_answer
