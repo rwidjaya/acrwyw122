@@ -57,7 +57,7 @@ def get_story(url):
     txt = [t.text for t in text]
     return " ".join(txt)
 
-def get_story_or_title(url):
+def get_storytitle(url):
     story_tup = get_Article(url)
     if not story_tup:
         #if storyortitle == 0:

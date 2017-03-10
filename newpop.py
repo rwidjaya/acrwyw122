@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import news_crawl as nc
 import compare
-from util import get_regex_url, get_story_or_title
+from util import get_regex_url, get_storytitle
 import mirror
 from multiprocessing import Pool
 
@@ -38,17 +38,16 @@ def links_to_compare(url):
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
 			news_links += nc.extract_huff()
-	inputitle, inputstory = get_story_or_title(url)
+	inputitle, inputstory = get_storytitle(url)
 	return [(inputitle, inputstory, link2) for link2 in news_links]
 
 def art_compare(url_tup):
 	inputitle, inputstory, art_url = url_tup
 	exists = get_regex_url(art_url)
 	if exists:
-		head, txt = get_story_or_title(art_url)
+		head, txt = get_storytitle(art_url)
 		#print(art_url)
 		sim_score = compare.cossim(txt,inputstory)
-		#head = get_story_or_title(art_url,title)
 
 		return (head, exists, art_url, sim_score)
 
@@ -59,7 +58,7 @@ def pop_bias(url):
 	compared = p.map_async(art_compare, urls_to_crawl).get()
 	p.close()
 
-	input_head, input_text = get_story_or_title(url)
+	input_head, input_text = get_storytitle(url)
 	input_info = allsides[get_regex_url(url)]
 	input_source = input_info["Source Name"]
 	input_bias = input_info["Bias"]
