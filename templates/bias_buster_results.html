@@ -16,7 +16,7 @@
             {% elif item == "missing" %}
             {% elif item == "ranking" %}
             {% else %}
-                <li><a href="{{data[item][1]}}">{{ item }}</a> from {{ data[item][2] }} leaning {{ data[item][0] }}</li>
+                <li><a href="{{data[item][1]}}">{{ item }}</a> leaning {{ data[item][0] }}</li>
                 <!-- <li><a href="{{ data[item][1] }}">{{ item }}</a> leaning {{ data[item][0] }}</li> -->
             {% endif %}
         {% endfor %}

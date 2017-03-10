@@ -7,7 +7,8 @@ allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL")
 ranks = ["Left", "Lean Left", "Center", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
-sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "nytimes", "motherjones", "huffingtonpost"]
+# sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "nytimes", "motherjones", "huffingtonpost"]
+sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "motherjones", "huffingtonpost"]
 
 def get_mirrors(url):
     #where url = the regex cleaned portion of the url
@@ -29,7 +30,8 @@ def get_mirrors(url):
             mirrors += ["npr", "wsj"]
 
         if opprank == "Center":
-            mirrors += [random.choice(["huffingtonpost","motherjones", "nytimes"])]
+            # mirrors += [random.choice(["huffingtonpost","motherjones", "nytimes"])]
+            mirrors += [random.choice(["huffingtonpost","motherjones"])]
             mirrors += [random.choice(["foxnews","breitbart","thefiscaltimes"])]
 
     if url in mirrors:

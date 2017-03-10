@@ -24,8 +24,8 @@ def cossim(article1, article2):
 Sample Usage:
 g = "https://www.theguardian.com/us-news/2017/feb/09/judges-deny-trump-travel-ban-enforcement-uphold-order"
 b = "http://www.breitbart.com/big-government/2017/02/10/nuclear-option-trump-exec-order-sets-showdown-executive-judicial-branches/"
-guardian = util.get_text(g)
-breitbart = util.get_text(b)
+guardian = util.get_story(g)
+breitbart = util.get_story(b)
 
 print("cosine similarity: {}".format(cossim(guardian, breitbart)))
 '''
