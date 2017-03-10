@@ -1,7 +1,7 @@
 body {
 	background-color: #2ea8ff;
 	color: white;
-	font-family: Calibri;
+	font-family: Calibri, Candara, Arial, sans-serif;
 	font-weight: 100;
 	text-align: center;
 }
@@ -37,6 +37,7 @@ h2 {
 p {
 	font-size: 20px;
 	color: #ffffff;
+	Calibri, Candara, Arial, sans-serif;
 
 }
 #headertext, a {
@@ -51,6 +52,7 @@ ul {
     max-width: 650px;
 	/*padding-left: 60px;*/
 	font-size: 20px;
+	font-family: Calibri, Candara, Arial, sans-serif;
 }
 form {
 	font-size: 35px;
