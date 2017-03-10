@@ -55,7 +55,9 @@ ul {
 form {
 	font-size: 35px;
 }
-
+li.center {
+	text-align: center;
+}
 #input {
     margin: auto;
 }
