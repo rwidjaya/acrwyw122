@@ -16,10 +16,18 @@ def extract(url, tag, attr):
 
 #NPR
 def extract_npr():
-	npr_url = 'http://www.npr.org/sections/news/'
+	npr_urls = ['http://www.npr.org/sections/news/', 'http://www.npr.org/sections/thetwo-way/']
 	npr_tag = 'h2'
 	npr_attr = {'class':'title'}
-	return extract(npr_url,npr_tag,npr_attr)
+
+	npr_links_clean = []
+	
+	for n in npr_urls:
+		npr_links = extract(n,npr_tag,npr_attr)
+		npr_links_clean += [a for a in npr_links if a not in npr_links_clean]
+
+	return npr_links_clean
+
 
 #WALL STREET JOURNAL
 def extract_wsj():
@@ -32,6 +40,7 @@ def extract_wsj():
 	wsj_links_clean = [a for a in wsj_links if artrgx.search(a)]
 
 	return wsj_links_clean
+
 
 #FISCAL TIMES
 def extract_tft():
@@ -46,6 +55,7 @@ def extract_tft():
 
 	return tft_links_clean
 
+
 #BREITBART
 def extract_brt():
 	brt_url = 'http://www.breitbart.com/'
@@ -56,10 +66,11 @@ def extract_brt():
 
 	return brt_links_clean
 
+
 #FOX NEWS
 def extract_fox():
-	fox_url = 'http://www.foxnews.com/'
-	fox_soup = get_soup(fox_url)
+	fox_hp = 'http://www.foxnews.com/'
+	fox_soup = get_soup(fox_hp)
 	fox_json = json.loads(fox_soup.find('script', type= 'application/ld+json').text)
 
 	fox_links = []
@@ -69,9 +80,18 @@ def extract_fox():
 			link = l['url']
 			foxrgx = re.compile(r'www.foxnews.com')
 			if (foxrgx.search(link)) and (link not in fox_links):
-				fox_links += [link]
+				fox_links += link
+
+	fox_url = 'http://www.foxnews.com/world.html'
+	fox_tag = 'h2'
+	fox_add_links = extract(fox_url,fox_tag, None)
+	
+	oprgx = re.compile('\/opinion\/|sectionname')
+	fox_add_links_clean = ['http://www.foxnews.com'+a for a in fox_add_links if not oprgx.search(a)]
+	fox_links += fox_add_links_clean
 
 	return fox_links
+
 
 #NEW YORK TIMES
 def extract_nyt():
@@ -106,4 +126,4 @@ def extract_huff():
 	artrgx = re.compile(r'www.huffingtonpost.com')
 	huff_links_clean = [a for a in huff_links if artrgx.search(a)]
 
-	return huff_links
+	return huff_links_clean
