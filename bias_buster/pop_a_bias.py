@@ -57,10 +57,10 @@ def pop_bias(link):
 			news_links = extract_nyt()
 
 		elif nsource == "motherjones":
-                        news_links = extract_mjs()
+                        news_links = extract_mojo()
 
 		elif nsource == "huffingtonpost":
-			news_links = extract_huf()
+			news_links = extract_huff()
 
 		info = allsides[nsource]
 		news_name = info["Source Name"]
