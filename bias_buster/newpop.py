@@ -3,7 +3,7 @@ import re
 import json
 import pandas as pd
 from newspaper import Article
-import news_crawl as nc
+import .news_crawl as nc
 import compare
 import util
 import mirror

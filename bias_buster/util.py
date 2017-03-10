@@ -1,12 +1,11 @@
 from bs4 import SoupStrainer, BeautifulSoup
 import urllib3
-import csv
 import numpy as np
 import pandas as pd
 import certifi
 import re
 
-allsides = pd.read_csv("as.csv")
+allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def get_soup(url):

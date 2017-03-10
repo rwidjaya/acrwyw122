@@ -3,6 +3,7 @@ from newspaper import Article
 from .news_crawl import *
 from .compare import cossim
 from .mirror import get_mirrors
+from .util import get_text
 
 allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
@@ -31,7 +32,7 @@ def pop_bias(link):
 		story_input.parse()
 		story_input_text = story_input.text
 	else:
-		story_text = util.get_text(link)
+		story_text = get_text(link)
 
 	for nsource in news_list:
 		if nsource == 'npr':
@@ -75,7 +76,7 @@ def pop_bias(link):
 				story.parse()
 				story_text = story.text
 			else:
-				story_text = util.get_text(narticle)
+				story_text = get_text(narticle)
 
 			sim_score = cossim(story_input_text, story_text)
 
