@@ -45,7 +45,7 @@ def pop_bias(link):
 			news_links = extract_wsj()
 
 		elif nsource == "thefiscaltimes":
-			news_links = extract_fnt()
+			news_links = extract_tft()
 
 		elif nsource == "foxnews":
 			news_links = extract_fox()
