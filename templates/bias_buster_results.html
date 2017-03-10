@@ -8,7 +8,7 @@
 		<p class="header">Bias Buster | <a class="header" href="/">Home</a></p>
 	</div>
 	<h1>We've busted your bias!</h1>
-    <h2>Looks like your original news site was ranked as "{{ data["ranking"] }}" by <a href="http://www.allsides.com/bias/bias-ratings">AllSides</a>. Here are some alternate news sites with centrist and opposing views that you might want to check out.</h2>
+    <h2>Based on your original article's ranking by <a href="http://www.allsides.com/bias/bias-ratings">AllSides</a>, here are some alternate news sites with centrist and opposing views that you might want to check out.</h2>
     <ul>
         {% for item in data %}
             {% if item == "none" %}
@@ -16,8 +16,8 @@
             {% elif item == "missing" %}
             {% elif item == "ranking" %}
             {% else %}
-                <!--<li><a href="{{data[item][1]}}">{{ item }}</a> from {{ data[item][2] }} leaning {{ data[item][0] }}</li>-->
-                <li><a href="{{ data[item][1] }}">{{ item }}</a> leaning {{ data[item][0] }}</li>
+                <li><a href="{{data[item][1]}}">{{ item }}</a> from {{ data[item][2] }} leaning {{ data[item][0] }}</li>
+                <!-- <li><a href="{{ data[item][1] }}">{{ item }}</a> leaning {{ data[item][0] }}</li> -->
             {% endif %}
         {% endfor %}
         {% if data["missing"] is defined %}

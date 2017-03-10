@@ -3,7 +3,7 @@ from newspaper import Article
 from .news_crawl import *
 from .compare import cossim
 from .mirror import get_mirrors
-from .util import get_text
+from .util import get_text, get_headline
 
 allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
@@ -91,7 +91,7 @@ def pop_bias(link):
 						rv[news_name] = [nsource, narticle, sim_score]
 						#we want the article with highest sim score
 
-	final_answer = {key: val[:2] for key, val in rv.items()}
+	final_answer = {get_headline(link): val[:2] + [news_name] for key, val in rv.items()}
 	if len(final_answer) == 0:
 		final_answer["none"] = ["Unfortunately, there were no comparable articles on sites with different biases.", ""]
 	elif len(final_answer) < 3:
