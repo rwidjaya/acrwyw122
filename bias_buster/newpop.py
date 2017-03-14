@@ -1,9 +1,5 @@
-import bs4
-import re
-import json
 import pandas as pd
-from newspaper import Article
-import .news_crawl as nc
+import news_crawl as nc
 import compare
 from util import get_regex_url, get_storytitle
 import mirror
@@ -11,12 +7,14 @@ from multiprocessing import Pool
 
 allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
-story = 0
-title = 1
 
 def links_to_compare(url):
+    '''
+    Generates a list of potential urls to suggest to user from mirror-rank sources.
+    Input: url (str) = the link to a news article given by the user.
+    Output: list of tuples - (input headline (str), input story text (str), url to compare (str))
+    '''
 	is_featured = get_regex_url(url)
-
 	assert is_featured, "The news source is not in our database; please enter another article from different news source."
 
 	news_list = mirror.get_mirrors(is_featured)
@@ -39,22 +37,39 @@ def links_to_compare(url):
 			news_links += nc.extract_mojo()
 		elif nsource == "huffingtonpost":
 			news_links += nc.extract_huff()
-	inputitle, inputstory = get_storytitle(url)
-	return [(inputitle, inputstory, link2) for link2 in news_links]
 
-def art_compare(url_tup):
-	inputitle, inputstory, art_url = url_tup
+	input_head, input_text = get_storytitle(url)
+	return [(input_head, input_text, link2) for link2 in news_links]
+    #Getting the text and title of the original url here avoids pulling NYT and Fiscal Times urls more than once.
+    #Calling NYT and Fiscal Times more than once results in a max retries error.
+    #Additionally, Pool.map_async only takes one argument, while we need to compare the text of two articles.
+    #Containing this in a tuple was the best way of packaging multiple arguments into one.
+
+def art_compare(comparison_tup):
+    '''
+    Compares two articles for cosine similarity and returns their score and the
+    headline, source name tag, and url of the non-user-inputted article.
+    Input: comparison_tup = (input headline (str), input text (str), article url (str))
+    Output: tuple of headline, source name tag, and url of the non-user-inputted
+        article, along with its cosine similarity with the user-inputted url.
+    '''
+	input_head, input_text, art_url = comparison_tup
 	exists = get_regex_url(art_url)
 	if exists:
 		head, txt = get_storytitle(art_url)
-		#print(art_url)
-		sim_score = compare.cossim(txt,inputstory)
-
+		sim_score = compare.cossim(txt,input_text)
 		return (head, exists, art_url, sim_score)
 
 def pop_bias(url):
+    '''
+    Checks the bias rating of a user-inputted url.
+    Returns a dictionary of news headlines from mirror-ranked sources, with
+    values of the articles' bias ratings and urls.
+    Input: url (str)
+    Output: final_answer (dict) = dict of headline strings with tuple values
+        containing a bias rating (str) and article url (str).
+    '''
 	urls_to_crawl = links_to_compare(url)
-	#print(urls_to_crawl)
 	p = Pool(processes=25)
 	compared = p.map_async(art_compare, urls_to_crawl).get()
 	p.close()
@@ -77,15 +92,15 @@ def pop_bias(url):
 				else:
 					if rv[source][3] < score:
 						rv[source] = (headline, bias, arturl, score)
-					    #we want the article with highest sim score
+					    #We want the article with highest similarity score.
 
-	final_answer = {val[0]: (key, val[1:3]) for key, val in rv.items()}
+	final_answer = {val[0]: (key, val[1], val[2]) for key, val in rv.items()}
 	if len(final_answer) == 1:
 		final_answer["none"] = \
-		["Unfortunately, there were no comparable articles on sites with different biases.", ""]
+		("Unfortunately, there were no comparable articles on sites with different biases.")
 	elif len(final_answer) < 4:
 		num_articles = len(final_answer) - 1
 		final_answer["missing"] = \
-		["We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),""]
+		("We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles))
 
 	return final_answer
