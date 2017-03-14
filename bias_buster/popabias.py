@@ -1,8 +1,8 @@
 import pandas as pd
 from .news_crawl import *
-import compare
+from .compare import cossim
 from .util import get_regex_url, get_storytitle
-import .mirror as m
+from .mirror import get_mirrors
 from multiprocessing import Pool
 
 allsides = pd.read_csv("./bias_buster/as.csv")
@@ -17,7 +17,7 @@ def links_to_compare(url):
     is_featured = get_regex_url(url)
     assert is_featured, "The news source is not in our database; please enter another article from different news source."
 
-    news_list = m.get_mirrors(is_featured)
+    news_list = get_mirrors(is_featured)
     news_links = []
 
     for nsource in news_list:
@@ -60,7 +60,7 @@ def art_compare(comparison_tup):
         exists = get_regex_url(art_url)
     if exists:
         head, txt = get_storytitle(art_url)
-        sim_score = compare.cossim(txt,input_text)
+        sim_score = cossim(txt,input_text)
         return (head, exists, art_url, sim_score)
 
 def pop_bias(url):
