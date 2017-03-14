@@ -6,7 +6,7 @@ import certifi
 import re
 from newspaper import Article
 
-allsides = pd.read_csv("./bias_buster/as.csv")
+allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def get_soup(url):
