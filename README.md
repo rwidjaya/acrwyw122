@@ -1,6 +1,14 @@
 #Pop-a-Bias
 Alyssa Cox, Yuxi Wu, Regina Widjaya
 
+How to run our software: 
+-In the command line, cd into the directory acrwyu122
+-Type into the command line: "Python3 bias_buster_flask.py"
+-Navigate to port 5001 in the browser on the machine. Our web app should pop up. 
+-Run article links to test. 
+
+Our Proposal: 
+
 In this past election, citizens from opposing sides of the political spectrum have accused each other of spreading bias and lies to the general public. With the ascent of Donald Trump—and his inflammatory, often factually dubious rhetoric—to the presidential seat, the divide has only been exacerbated, and news media have become one of the primary targets of greatest criticism for alleged bias and lies. Distrust in the mainstream media has grown so severe that even the previously unthinkable notion of “alternative facts” is now used by some to further justify the (supposed) dangers of media bias. As UChicago students, we want to make sure that we are getting the whole story when we read the news, and that includes reading what the other side has to say. 
 
 We propose to create a Chrome extension that, when a user visits a website with a political bias, (1) sends a pop-up to the page alerting the user that what they are reading might contain bias and (2) suggests to the user an article on the same issue from a different media with opposing or center political affiliation, thus providing the user with opportunity to do comparative reading and understand the issue from multiple different point of views. 
