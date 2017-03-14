@@ -1,17 +1,20 @@
 import pandas as pd
-import numpy as np
 import random
-
 
 allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL")
 ranks = ["Left", "Lean Left", "Center", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
-# sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "nytimes", "motherjones", "huffingtonpost"]
-sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "motherjones", "huffingtonpost"]
+sites = ["npr", "wsj", "thefiscaltimes", "foxnews", "breitbart", "nytimes", "motherjones", "huffingtonpost"]
 
 def get_mirrors(url):
-    #where url = the regex cleaned portion of the url
+    '''
+    Returns 2 centrist and 1 opposite-leaning news source if url is biased.
+    Returns 2 centrist, 1 left, and 1 right-leaning news source if url is centrist but not WSJ or NPR.
+    Returns 1 centrist, 1 left, and 1 right-leaning news source if url is WSJ or NPR.
+    Input: url (str) = the source name tag cleaned portion of a given news article url.
+    Output: list of mirror url strings
+    '''
     mirrors = []
     if url in allsides.index:
         opprank = ranksrev[ranks.index(allsides.ix[url, "Bias"])]
@@ -21,7 +24,6 @@ def get_mirrors(url):
         mirrors = murls[murls_rank].index
         mirrors = list(mirrors)
 
-        #need to find better way to include the center leaning news
         if url == "wsj":
             mirrors += ["npr"]
         elif url == "npr":
@@ -30,12 +32,9 @@ def get_mirrors(url):
             mirrors += ["npr", "wsj"]
 
         if opprank == "Center":
-            # mirrors += [random.choice(["huffingtonpost","motherjones", "nytimes"])]
-            mirrors += [random.choice(["huffingtonpost","motherjones"])]
+            mirrors += [random.choice(["huffingtonpost","motherjones", "nytimes"])]
             mirrors += [random.choice(["foxnews","breitbart","thefiscaltimes"])]
 
     if url in mirrors:
         mirrors.remove(url)
-
-
     return list(set(mirrors))
