@@ -1,1 +1,1 @@
-from bias_buster.pop_a_bias import pop_bias
+from bias_buster.popabias import pop_bias
