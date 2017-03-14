@@ -13,7 +13,7 @@ def get_source_url(url):
     '''
     Returns the source name tag of a news source on the AllSides bias ratings page.
     Input: url (str)
-    Output: urlkey (str) = a source name tag retrieved with regex
+    Output: urlkey (str) = source name tag retrieved with regex.
     '''
     urlsoup = get_soup(url)
     urltag = urlsoup.find("div", class_="source-image")
