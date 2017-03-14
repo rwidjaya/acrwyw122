@@ -3,7 +3,6 @@ import re
 import json
 from .util import get_strained_soup, get_soup
 
-
 def extract(url, tag, attr):
 	'''
 	Extracts all URLS from a given news source homepage.
