@@ -19,10 +19,10 @@ def homepage():
 def results():
     print(request.form["url"])
     try:
-        data = pop_bias(request.form['url'])
+        data, bias = pop_bias(request.form['url'])
         print(data)
     except AssertionError:
         data = {'none': ['The news source is not in our database; please enter another article from different news source.']} 
     #data = {'source name': ['center', 'http://thisisafakelink.com', 'title?']}
     # data = tester(request.form["url"])
-    return render_template("bias_buster_results.html", data = data)
+    return render_template("bias_buster_results.html", data = data, bias = bias)
