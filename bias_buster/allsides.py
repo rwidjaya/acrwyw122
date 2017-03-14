@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import certifi
 import re
-from util import get_soup
+from .util import get_soup
 
 asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
 
