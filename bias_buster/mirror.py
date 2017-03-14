@@ -1,7 +1,7 @@
 import pandas as pd
 import random
 
-allsides = pd.read_csv("./bias_buster/as.csv")
+allsides = pd.read_csv("as.csv")
 allsides = allsides.set_index("News Source URL")
 ranks = ["Left", "Lean Left", "Center", "Lean Right", "Right"]
 ranksrev = ranks[::-1]
