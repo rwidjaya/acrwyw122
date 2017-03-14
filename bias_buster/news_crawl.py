@@ -8,9 +8,9 @@ def extract(url, tag, attr):
 	Extracts all URLS from a given news source homepage.
 	Inputs:
 		- url (str) = the url of the news source home page
-		- tag (str) = the HTML tag that links are filed under in that url
-		- attr (dict) = attributes of an HTML tag
-	Output: links (list) = a list of url strings
+		- tag (str) = the HTML tag that links are filed under in that url.
+		- attr (dict) = attributes of above HTML tag.
+	Output: links (list) = a list of url strings.
 	'''
 	soup = get_strained_soup(url,tag,attr)
 	if tag=='a':
@@ -26,7 +26,7 @@ def extract_npr():
 	'''
 	Finds and returns a list of all news urls from NPR.
 	This includes the main news section and the breaking news section.
-	Output: npr_links (list) = a list of url strings
+	Output: npr_links (list) = a list of url strings.
 	'''
 	npr_urls = ['http://www.npr.org/sections/news/', 'http://www.npr.org/sections/thetwo-way/']
 	npr_tag = 'h2'
@@ -40,7 +40,7 @@ def extract_npr():
 def extract_wsj():
 	'''
 	Finds and returns a list of all news urls from the Wall Street Journal homepage.
-	Output: wsj_links_clean (list) = a list of url strings
+	Output: wsj_links_clean (list) = a list of url strings.
 	'''
 	wsj_url = 'https://www.wsj.com/'
 	wsj_tag = 'a'
@@ -54,7 +54,7 @@ def extract_wsj():
 def extract_tft():
 	'''
 	Finds and returns a list of all news urls from the Fiscal Times homepage.
-	Output: tft_links_clean (list) = a list of url strings
+	Output: tft_links_clean (list) = a list of url strings.
 	'''
 	tft_url = 'http://www.thefiscaltimes.com/'
 	tft_tag = 'div'
@@ -70,7 +70,7 @@ def extract_tft():
 def extract_brt():
 	'''
 	Finds and returns a list of all news urls from the Breitbart homepage.
-	Output: brt_links_clean (list) = a list of url strings
+	Output: brt_links_clean (list) = a list of url strings.
 	'''
 	brt_url = 'http://www.breitbart.com/'
 	brt_tag = 'h2'
@@ -84,7 +84,7 @@ def extract_fox():
 	'''
 	Finds and returns a list of all news urls from Fox News.
 	This includes the main homepage and the world news section.
-	Output: fox_links (list) = a list of url strings
+	Output: fox_links (list) = a list of url strings.
 	'''
 	fox_hp = 'http://www.foxnews.com/'
 	fox_soup = get_soup(fox_hp)
@@ -109,7 +109,7 @@ def extract_fox():
 def extract_nyt():
 	'''
 	Finds and returns a list of all news urls from the New York Times homepage.
-	Output: nyt_links_clean (list) = a list of url strings
+	Output: nyt_links_clean (list) = a list of url strings.
 	'''
 	nyt_url = 'https://www.nytimes.com'
 	nyt_tag = 'h2'
@@ -124,7 +124,7 @@ def extract_nyt():
 def extract_mojo():
 	'''
 	Finds and returns a list of all news urls from the Mother Jones homepage.
-	Output: mojo_links_clean (list) = a list of url strings
+	Output: mojo_links_clean (list) = a list of url strings.
 	'''
 	mojo_url = 'http://www.motherjones.com/'
 	mojo_tag = 'h3'
@@ -137,7 +137,7 @@ def extract_mojo():
 def extract_huff():
 	'''
 	Finds and returns a list of all news urls from the Huffington Post homepage.
-	Output: huff_links_clean (list) = a list of url strings
+	Output: huff_links_clean (list) = a list of url strings.
 	'''
 	huff_url = 'http://www.huffingtonpost.com/'
 	huff_tag = 'a'
