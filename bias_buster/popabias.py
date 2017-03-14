@@ -97,10 +97,10 @@ def pop_bias(url):
     final_answer = {val[0]: (val[1], val[2], key) for key, val in rv.items()}
     if len(final_answer) == 1:
         final_answer["none"] = \
-        ("Unfortunately, there were no comparable articles on sites with different biases.")
+        ("Unfortunately, there were no comparable articles on sites with different biases.","")
     elif len(final_answer) < 4:
         num_articles = len(final_answer) - 1
         final_answer["missing"] = \
-        ("We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles))
+        ("We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),"")
 
     return final_answer
