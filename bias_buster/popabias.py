@@ -1,11 +1,11 @@
 import pandas as pd
-import news_crawl as nc
+from .news_crawl import *
 import compare
-from util import get_regex_url, get_storytitle
-import mirror
+from .util import get_regex_url, get_storytitle
+import .mirror as m
 from multiprocessing import Pool
 
-allsides = pd.read_csv("as.csv")
+allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
 def links_to_compare(url):
@@ -17,26 +17,26 @@ def links_to_compare(url):
     is_featured = get_regex_url(url)
     assert is_featured, "The news source is not in our database; please enter another article from different news source."
 
-    news_list = mirror.get_mirrors(is_featured)
+    news_list = m.get_mirrors(is_featured)
     news_links = []
 
     for nsource in news_list:
         if nsource == "npr":
-            news_links += nc.extract_npr()
+            news_links += extract_npr()
         elif nsource == "wsj":
-            news_links += nc.extract_wsj()
+            news_links += extract_wsj()
         elif nsource == "thefiscaltimes":
-            news_links += nc.extract_tft()
+            news_links += extract_tft()
         elif nsource == "foxnews":
-            news_links += nc.extract_fox()
+            news_links += extract_fox()
         elif nsource == "breitbart":
-            news_links += nc.extract_brt()
+            news_links += extract_brt()
         elif nsource == "nytimes":
-            news_links += nc.extract_nyt()
+            news_links += extract_nyt()
         elif nsource == "motherjones":
-            news_links += nc.extract_mojo()
+            news_links += extract_mojo()
         elif nsource == "huffingtonpost":
-            news_links += nc.extract_huff()
+            news_links += extract_huff()
 
     input_head, input_text = get_storytitle(url)
     return [(input_head, input_text, link2) for link2 in news_links]
