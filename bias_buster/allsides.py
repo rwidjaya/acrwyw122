@@ -10,6 +10,11 @@ from .util import get_soup
 asurl = "http://www.allsides.com/bias/bias-ratings?field_news_source_type_tid=2&field_news_bias_nid=1&field_featured_bias_rating_value=1&title="
 
 def get_source_url(url):
+    '''
+    Returns the source name tag of a news source on the AllSides bias ratings page.
+    Input: url (str)
+    Output: urlkey (str) = a source name tag retrieved with regex
+    '''
     urlsoup = get_soup(url)
     urltag = urlsoup.find("div", class_="source-image")
     url = urltag.find("a")["href"].strip()
@@ -18,11 +23,16 @@ def get_source_url(url):
     return urlkey
 
 def source_info(soup):
+    '''
+    Creates a dictionary of news sources, with values on bias rating, url, and
+    the community agree/disagree ratio on the respective bias ratings.
+    Input: soup (BeautifulSoup object) = soup of the AllSides bias ratings page.
+    Outpu: info (dict of tuples) = dictionary of news source information.
+    '''
     odd = soup.find_all("tr", class_="odd")
     odd = [(o, o.find_next("div", class_="rate-details")) for o in odd]
     even = soup.find_all("tr", class_="even")
     even = [(e, e.find_next("div", class_="rate-details")) for e in even]
-
     tags = [None]*(len(odd) + len(even))
     tags[::2] = odd
     tags[1::2] = even
@@ -59,7 +69,6 @@ def source_info(soup):
                 else:
                     url = get_source_url("www.allsides.com{}".format(a["href"]))
                 source = a.text
-
             elif "bias" in a["href"]:
                 rating = a.find("img")
                 if rating:
@@ -70,6 +79,9 @@ def source_info(soup):
     return info
 
 def go():
+    '''
+    Prints the source info as a pandas dataframe and writes to a csv.
+    '''
     soup = get_soup(asurl)
     info = source_info(soup)
     labels = ["News Source URL", "Source Name", "Bias", "Agree", "Disagree", "Ratio"]
