@@ -1,7 +1,7 @@
 import bs4
 import re
 import json
-from .util import get_strained_soup, get_soup
+from .til import get_strained_soup, get_soup
 
 def extract(url, tag, attr):
 	'''
