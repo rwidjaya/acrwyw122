@@ -21,7 +21,7 @@ def links_to_compare(url):
     news_links = []
 
     for nsource in news_list:
-        if nsource == 'npr':
+        if nsource == "npr":
             news_links += nc.extract_npr()
         elif nsource == "wsj":
             news_links += nc.extract_wsj()
@@ -54,7 +54,10 @@ def art_compare(comparison_tup):
         article, along with its cosine similarity with the user-inputted url.
     '''
     input_head, input_text, art_url = comparison_tup
-    exists = get_regex_url(art_url)
+    if 'npr' in art_url:
+        exists = 'npr'
+    else:
+        exists = get_regex_url(art_url)
     if exists:
         head, txt = get_storytitle(art_url)
         sim_score = compare.cossim(txt,input_text)

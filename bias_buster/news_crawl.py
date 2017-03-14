@@ -31,10 +31,16 @@ def extract_npr():
 	npr_urls = ['http://www.npr.org/sections/news/', 'http://www.npr.org/sections/thetwo-way/']
 	npr_tag = 'h2'
 	npr_attr = {'class':'title'}
-	npr_links1 = extract(npr_urls[0],npr_tag,npr_attr)
+	'''npr_links1 = extract(npr_urls[0],npr_tag,npr_attr)
 	npr_links2 = extract(npr_urls[1],npr_tag,npr_attr)
-	npr_links = list(set(npr_links1 + npr_links2))
-	return npr_links
+	npr_links = set(npr_links1 + npr_links2)
+	return npr_links'''
+
+	npr_links_clean = []
+	for n in npr_urls:
+		npr_links = extract(n,npr_tag,npr_attr)
+		npr_links_clean += [a for a in npr_links if a not in npr_links_clean]
+	return npr_links_clean
 
 #WALL STREET JOURNAL
 def extract_wsj():
