@@ -26,3 +26,11 @@ def results():
     #data = {'source name': ['center', 'http://thisisafakelink.com', 'title?']}
     # data = tester(request.form["url"])
     return render_template("bias_buster_results.html", data = data)
+
+#create a request routing for the extension to access JSON
+@app.route('/bias_busted_dataonly', methods = ["POST"])
+def biasbust():
+    url = request.data
+    data2 = pop_bias(url)
+    if data2:
+        return jsonify({title:info[title]})
