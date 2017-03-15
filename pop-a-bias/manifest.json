@@ -4,8 +4,16 @@
 	"manifest_version": 2,
 	"description": "Popping political bias one article at a time",
 	"browser_action": {
-		"default_icon":"temp_bubble.png" 
-
+		"default_icon":"popicon.png", 
+		"default_popup":"popup.html"
+	},
+	"permissions": [
+		"tabs",
+		"http://localhost/"
+	],
+	"background":{
+		"scripts": ["popup.js"]
 	}
+
 
 }
