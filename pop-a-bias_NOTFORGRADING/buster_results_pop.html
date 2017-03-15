@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<link rel="stylesheet" type="text/css" href="../static/bias_buster_results.css">
+
+    <div id="header">
+		<p class="header">Bias Buster</p>
+	</div>
+	<h1>We've busted your bias!</h1>
+    <h2>Based on your original article's ranking by <a href="http://www.allsides.com/bias/bias-ratings">AllSides</a>, here are some alternate news sites with centrist and opposing views that you might want to check out.</h2>
+    <ul>
+        {% for item in data %}
+            {% if item == "none" %}
+                {{ data[item][0] }}
+            {% elif item == "missing" %}
+            {% elif item == "ranking" %}
+            {% else %}
+                <li><a href="{{data[item][1]}}">{{ item }}</a> leaning {{ data[item][0] }}</li>
+                <!-- <li><a href="{{ data[item][1] }}">{{ item }}</a> leaning {{ data[item][0] }}</li> -->
+            {% endif %}
+        {% endfor %}
+        {% if data["missing"] is defined %}
+            {{ data["missing"][0] }}
+        {% endif %}
+
+        <!-- <li><a href="{{ data['url_center'] }}"> "{{ data['title_center'] }}"</a> from {{ data["source_center"]}} </li> -->
+        <!-- <li><a href="{{ data['url_opp_one'] }}"> "{{ data['title_opp_one'] }}"</a> from {{ data["source_opp_one"]}}</li> -->
+        <!-- <li><a href="{{ data['url_opp_two'] }}"> "{{ data['title_opp_two'] }}"</a> from {{ data["source_opp_two"]}}</li> -->
+
+
+    </ul>
+
+</body>
+</html>
