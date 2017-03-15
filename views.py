@@ -17,10 +17,10 @@ def homepage():
 
 @app.route("/bias_busted", methods=["POST"])
 def results():
-    print(request.form["url"])
+    #print(request.form["url"])
     try:
         data, bias = pop_bias(request.form['url'])
-        print(data)
+        #print(data)
     except AssertionError:
         data = {'none': ['The news source is not in our database; please enter another article from different news source.']} 
     #data = {'source name': ['center', 'http://thisisafakelink.com', 'title?']}
@@ -28,12 +28,13 @@ def results():
     return render_template("bias_buster_results.html", data = data)
 
 
-#create a request routing for the extension to access JSON
+#create a request routing for the extension to access JSON - NOT FOR GRADING
 @app.route('/bias_busted_dataonly', methods = ["POST"])
 def biasbust():
-    url = request.form["url"]    
-    
-    data2 = pop_bias(url)
-    if data2:
-        return jsonify(data2)
-    return render_template("bias_buster_results.html", data = data, bias = bias)
+    url = request.form["url"]  
+    try:
+        data, bias = pop_bias(url)
+        #print(data)
+    except AssertionError:
+        data = {'none': ['This site is not in our news source/article database; please click on the pop-up from an article page or another article page from different news source.']} 
+    return jsonify(data)
