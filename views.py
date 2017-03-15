@@ -1,4 +1,4 @@
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from bias_buster_flask import app
 from form import UrlForm
 from test import tester
@@ -27,10 +27,12 @@ def results():
     # data = tester(request.form["url"])
     return render_template("bias_buster_results.html", data = data)
 
+
 #create a request routing for the extension to access JSON
 @app.route('/bias_busted_dataonly', methods = ["POST"])
 def biasbust():
-    url = request.data
+    url = request.form["url"]    
+    
     data2 = pop_bias(url)
     if data2:
-        return jsonify({title:info[title]})
+        return jsonify(data2)
