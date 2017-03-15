@@ -81,7 +81,8 @@ def pop_bias(url):
     input_info = allsides[get_regex_url(url)]
     input_source = input_info["Source Name"]
     input_bias = input_info["Bias"]
-    rv = {input_source:(input_head, input_bias, url, 1)}
+    #rv = {input_source:(input_head, input_bias, url, 1)}
+    rv = {}
 
     for article in compared:
         if article:
@@ -98,12 +99,12 @@ def pop_bias(url):
 					    #We want the article with highest similarity score.
 
     final_answer = {val[0]: (val[1], val[2], key) for key, val in rv.items()}
-    if len(final_answer) == 1:
+    if len(final_answer) == 0:
         final_answer["none"] = \
         ("Unfortunately, there were no comparable articles on sites with different biases.","")
     elif len(final_answer) < 4:
-        num_articles = len(final_answer) - 1
+        num_articles = len(final_answer) 
         final_answer["missing"] = \
         ("We couldn't get 3 stories on the same topic for you.  But here's {}!".format(num_articles),"")
 
-    return final_answer
+    return (final_answer, input_bias)
