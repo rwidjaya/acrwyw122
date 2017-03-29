@@ -11,6 +11,7 @@ import certifi
 import re
 from newspaper import Article
 
+
 allsides = pd.read_csv("./bias_buster/as.csv")
 allsides = allsides.set_index("News Source URL").T.to_dict()
 
@@ -47,7 +48,7 @@ def get_regex_url(url):
     Input: url (str).
     Output: urlstr (str) = source name tag retrieved with regex.
     '''
-    urlrgx = re.compile(r"(?<=://)(www[\.])?(.*)([\.]com|org|net)(.*)")
+    urlrgx = re.compile(r"(?<=://)(www[\.])?(.*)(\.com|\.org|\.net)(.*)")
     if urlrgx.search(url):
         urlstr = urlrgx.search(url).group(2)
         if urlstr in allsides.keys():
